@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>House of Pump — Training Club</title>
 <meta name="description" content="House of Pump: sala pesi e personal coaching ad accesso su prenotazione. Scrivici in DM su Instagram.">
-<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/rosaraia12-svg/HOP/6c1ca18c6830d7d7cba7f54ac26f5c74f4cf6541/PHOTO-2026-08-23-12-32-48.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -558,7 +558,7 @@
 <header class="site-header" id="header">
   <div class="container header-inner">
     <a href="#top" class="logo appear appear--scale">
-      <img class="logo-mark" src="assets/logo.png" alt="" aria-hidden="true">
+      <img class="logo-mark" src="https://raw.githubusercontent.com/rosaraia12-svg/HOP/6c1ca18c6830d7d7cba7f54ac26f5c74f4cf6541/PHOTO-2026-08-23-12-32-48.png" alt="" aria-hidden="true">
       HOUSE <span>OF</span> PUMP
     </a>
 
@@ -742,7 +742,7 @@
 <footer class="site-footer">
   <div class="container footer-inner">
     <a href="#top" class="logo">
-      <img class="logo-mark" src="assets/logo.png" alt="" aria-hidden="true">
+      <img class="logo-mark" src="https://raw.githubusercontent.com/rosaraia12-svg/HOP/6c1ca18c6830d7d7cba7f54ac26f5c74f4cf6541/PHOTO-2026-08-23-12-32-48.png" alt="" aria-hidden="true">
       HOUSE <span>OF</span> PUMP
     </a>
     <p class="footer-note">© <span id="year"></span> House of Pump. Tutti i diritti riservati.</p>
@@ -934,8 +934,9 @@
     var seq = { frame: 0 };
     var currentPhase = 0;
 
+    var FRAME_BASE = 'https://raw.githubusercontent.com/rosaraia12-svg/HOP/61b9686a4adb296eee7e0fd34ad492624a56fc86/';
     function frameUrl(i){
-      return 'discosingolo_webp/ezgif-frame-' + String(i + 1).padStart(3, '0') + '.webp';
+      return FRAME_BASE + 'ezgif-frame-' + String(i + 1).padStart(3, '0') + '.webp';
     }
 
     function sizeCanvas(){
@@ -984,6 +985,7 @@
         (function(idx){
           var img = new Image();
           img.decoding = 'async';
+          img.crossOrigin = 'anonymous';
           img.onload = img.onerror = function(){
             loadedCount++;
             updateLoaderUI();
