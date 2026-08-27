@@ -1030,6 +1030,11 @@
         return;
       }
       gsap.registerPlugin(ScrollTrigger);
+      // Mobile browsers (iOS Safari especially) drive scroll via momentum/inertia that
+      // fights with a JS-pinned section — reversing direction fast through the pin
+      // (e.g. scrolling back up out of Contatti) is exactly when it goes haywire.
+      // normalizeScroll hands scroll control to GSAP so the pin stays perfectly in sync.
+      ScrollTrigger.normalizeScroll(true);
       gsap.to(seq, {
         frame: FRAME_COUNT - 1,
         snap: 'frame',
@@ -1056,6 +1061,9 @@
       if (document.fonts && document.fonts.ready){
         document.fonts.ready.then(function(){ ScrollTrigger.refresh(); });
       }
+      // The Google Maps iframe in Contatti can finish loading after everything else and
+      // nudge the page's total height — recalc once more so the pin spacer stays accurate.
+      window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
     }
 
     // No-GSAP fallback: CSS sticky pin + a plain scroll listener
