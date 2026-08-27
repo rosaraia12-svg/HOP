@@ -41,6 +41,14 @@
 
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
+  html, body{
+    /* Belt-and-braces: nothing should be able to push the page wider than the
+       viewport (a stray negative margin, an oversized card, etc.). Without this,
+       a touch gesture that's even slightly diagonal can leave the browser unsure
+       whether to scroll vertically or horizontally, which is itself a common
+       cause of scroll feeling stuttery on mobile. */
+    overflow-x:hidden;
+  }
   body{
     margin:0;
     background:var(--color-background);
@@ -254,7 +262,10 @@
     border-bottom:1px solid var(--color-border);
     padding-block:var(--space-2);
     overflow:hidden;
-    margin-inline:calc(var(--space-3) * -1);
+    /* No ancestor padding to cancel out here (marquee sits directly in .pre-services,
+       which has none) — a negative margin-inline used to "break out" of a padded
+       .container would just push the bar past the viewport edge and make the whole
+       page horizontally scrollable. It's already full-width without it. */
   }
   .marquee-track{
     display:flex; gap:2.5rem;
