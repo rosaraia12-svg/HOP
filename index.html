@@ -928,7 +928,28 @@
     var dots = document.querySelectorAll('.services-dots .dot');
 
     var ctx = canvas.getContext('2d');
-    var FRAME_COUNT = 300;
+    var FRAME_COUNT = 300; // full range the scroll maps onto, kept constant regardless of how many frames we actually fetch
+    // Mobile devices choke on 300 full-res decoded bitmaps in memory (~1GB) — the browser starts
+    // evicting/re-decoding them under memory pressure, which is exactly what shows up as stutter
+    // when scrolling back over frames it already drew once. Loading every other frame on small
+    // screens halves that memory/network cost while staying visually smooth.
+    var isSmallScreen = window.matchMedia('(max-width:700px)').matches;
+    var FRAME_STEP = isSmallScreen ? 2 : 1;
+    var loadIndices = [];
+    for (var fi = 0; fi < FRAME_COUNT; fi += FRAME_STEP) loadIndices.push(fi);
+    if (loadIndices[loadIndices.length - 1] !== FRAME_COUNT - 1) loadIndices.push(FRAME_COUNT - 1);
+    var TOTAL_TO_LOAD = loadIndices.length;
+    // Precompute, for every possible scroll frame, which actually-loaded frame is closest —
+    // avoids a per-render search and keeps render() itself trivial.
+    var frameMap = new Array(FRAME_COUNT);
+    (function buildFrameMap(){
+      var li = 0;
+      for (var m = 0; m < FRAME_COUNT; m++){
+        while (li < loadIndices.length - 1 && Math.abs(loadIndices[li + 1] - m) <= Math.abs(loadIndices[li] - m)) li++;
+        frameMap[m] = loadIndices[li];
+      }
+    })();
+
     var images = new Array(FRAME_COUNT);
     var loadedCount = 0;
     var seq = { frame: 0 };
@@ -951,7 +972,7 @@
     }
 
     function render(){
-      var img = images[Math.round(seq.frame)];
+      var img = images[frameMap[Math.round(seq.frame)]];
       if (!img || !img.complete || !img.naturalWidth) return;
       var cw = canvas.width, ch = canvas.height;
       var iw = img.naturalWidth, ih = img.naturalHeight;
@@ -975,27 +996,25 @@
     }
 
     function updateLoaderUI(){
-      var pct = Math.round((loadedCount / FRAME_COUNT) * 100);
+      var pct = Math.round((loadedCount / TOTAL_TO_LOAD) * 100);
       if (loaderFill) loaderFill.style.width = pct + '%';
       if (loaderText) loaderText.textContent = 'Caricamento ' + pct + '%';
     }
 
     function preload(){
-      for (var i = 0; i < FRAME_COUNT; i++){
-        (function(idx){
-          var img = new Image();
-          img.decoding = 'async';
-          img.crossOrigin = 'anonymous';
-          img.onload = img.onerror = function(){
-            loadedCount++;
-            updateLoaderUI();
-            if (idx === 0){ sizeCanvas(); render(); }
-            if (loadedCount === FRAME_COUNT) onAllLoaded();
-          };
-          img.src = frameUrl(idx);
-          images[idx] = img;
-        })(i);
-      }
+      loadIndices.forEach(function(idx){
+        var img = new Image();
+        img.decoding = 'async';
+        img.crossOrigin = 'anonymous';
+        img.onload = img.onerror = function(){
+          loadedCount++;
+          updateLoaderUI();
+          if (idx === 0){ sizeCanvas(); render(); }
+          if (loadedCount === TOTAL_TO_LOAD) onAllLoaded();
+        };
+        img.src = frameUrl(idx);
+        images[idx] = img;
+      });
     }
 
     function onAllLoaded(){
