@@ -1030,11 +1030,6 @@
         return;
       }
       gsap.registerPlugin(ScrollTrigger);
-      // Mobile browsers (iOS Safari especially) drive scroll via momentum/inertia that
-      // fights with a JS-pinned section — reversing direction fast through the pin
-      // (e.g. scrolling back up out of Contatti) is exactly when it goes haywire.
-      // normalizeScroll hands scroll control to GSAP so the pin stays perfectly in sync.
-      ScrollTrigger.normalizeScroll(true);
       gsap.to(seq, {
         frame: FRAME_COUNT - 1,
         snap: 'frame',
@@ -1047,6 +1042,10 @@
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          fastScrollEnd: true, // snaps the tween to its end value on a fast fling instead of
+                                // trying to scrub through every frame — this is what goes
+                                // haywire on a quick reverse-scroll (e.g. flinging back up
+                                // out of Contatti), so let a fast fling just resolve cleanly
           onUpdate: function(self){
             setPhase(Math.min(3, Math.floor(self.progress * 4)));
           }
