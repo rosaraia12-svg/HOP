@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>House of Pump — Training Club</title>
+<meta name="description" content="House of Pump: sala pesi e personal coaching ad accesso su prenotazione. Scrivici in DM su Instagram.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --color-primary:#FFD100;
+    --color-primary-light:#FFE066;
+    --color-on-primary:#0A0A0A;
+    --color-accent:#FFE066;
+    --color-on-accent:#0A0A0A;
+    --color-background:#0B0B0C;
+    --color-background-2:#151517;
+    --color-foreground:#F5F5F5;
+    --color-card:#1A1A1C;
+    --color-card-hover:#222225;
+    --color-muted:#232326;
+    --color-muted-foreground:#B8B9BD;
+    --color-border:#2A2A2D;
+
+    --font-display:'Anton', sans-serif;
+    --font-head:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-serif:'Instrument Serif', 'Times New Roman', Times, serif;
+
+    --space-1:8px; --space-2:16px; --space-3:24px; --space-4:32px;
+    --space-5:48px; --space-6:64px; --space-7:96px;
+
+    --radius:14px;
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--color-background);
+    color:var(--color-foreground);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{display:block; max-width:100%;}
+
+  .grain{
+    position:fixed; inset:0; z-index:300; pointer-events:none;
+    opacity:.045; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none; margin:0; padding:0;}
+  h1,h2{font-family:var(--font-display); font-weight:400; line-height:1.02; margin:0;}
+  h3{font-family:var(--font-head); font-weight:700; line-height:1.05; margin:0;}
+
+  .container{
+    width:100%;
+    max-width:1180px;
+    margin-inline:auto;
+    padding-inline:var(--space-3);
+  }
+
+  .skip-link{
+    position:absolute; left:-999px; top:0; z-index:200;
+    background:var(--color-primary); color:var(--color-on-primary);
+    padding:12px 20px; border-radius:0 0 8px 0; font-weight:600;
+  }
+  .skip-link:focus{ left:0; }
+
+  :focus-visible{
+    outline:3px solid var(--color-accent);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  .eyebrow{
+    font-family:var(--font-head);
+    font-weight:600;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--color-primary-light);
+    font-size:.85rem;
+    margin:0 0 var(--space-2);
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-height:48px;
+    padding:12px 26px;
+    border-radius:999px;
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:1.05rem;
+    letter-spacing:.02em;
+    cursor:pointer;
+    border:2px solid transparent;
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease), background-color .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+    white-space:nowrap;
+  }
+  .btn::after{
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(115deg, transparent 20%, rgba(255,255,255,.55) 48%, transparent 76%);
+    transform:translateX(-130%);
+    transition:transform .65s ease;
+    pointer-events:none;
+  }
+  .btn:hover::after{ transform:translateX(130%); }
+  .btn-primary{
+    background:var(--color-primary);
+    color:var(--color-on-primary);
+    box-shadow:0 8px 24px -8px rgba(255,209,0,.35);
+  }
+  .btn-primary:hover{
+    background:var(--color-primary-light);
+    transform:translateY(-2px);
+    box-shadow:0 12px 30px -8px rgba(255,209,0,.5);
+  }
+  .btn-ghost{
+    background:transparent;
+    color:var(--color-foreground);
+    border-color:var(--color-border);
+  }
+  .btn-ghost:hover{
+    border-color:var(--color-primary-light);
+    color:var(--color-primary-light);
+    transform:translateY(-2px);
+  }
+
+  /* ---------- Header ---------- */
+  .site-header{
+    position:fixed; inset-inline:0; top:0; z-index:100;
+    padding-block:18px;
+    transition:padding .3s var(--ease), background-color .3s var(--ease), box-shadow .3s var(--ease), backdrop-filter .3s var(--ease);
+  }
+  .site-header.is-scrolled{
+    padding-block:10px;
+    background:rgba(11,11,12,.88);
+    backdrop-filter:blur(10px);
+    box-shadow:0 8px 24px -12px rgba(0,0,0,.6);
+    border-bottom:1px solid var(--color-border);
+  }
+  .header-inner{
+    display:flex; align-items:center; justify-content:space-between; gap:var(--space-3);
+  }
+  .logo{
+    display:inline-flex; align-items:center; gap:9px;
+    font-family:var(--font-display);
+    font-weight:400;
+    font-size:1.4rem;
+    letter-spacing:.02em;
+  }
+  .logo-mark{ width:30px; height:30px; object-fit:contain; flex:none; }
+  .logo span{ color:var(--color-primary); }
+  .nav-cta{ padding:10px 22px; min-height:44px; font-size:.95rem; }
+
+  /* ---------- Hero ---------- */
+  .hero-wrap{
+    padding:calc(var(--space-7) + 64px) var(--space-3) 0;
+  }
+  .hero{
+    position:relative;
+    width:100%;
+    max-width:1400px;
+    margin-inline:auto;
+    min-height:640px;
+    border-radius:28px;
+    overflow:hidden;
+    isolation:isolate;
+    background:
+      radial-gradient(circle at 72% 40%, rgba(255,209,0,.12), transparent 30%),
+      linear-gradient(135deg, var(--color-background-2) 0%, #0a0a0a 48%, #020202 100%);
+    box-shadow:0 30px 90px rgba(0,0,0,.5);
+  }
+  .hero-fx{
+    position:absolute; inset:0; z-index:0;
+    width:100%; height:100%;
+  }
+  .hero::after{
+    content:'';
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:linear-gradient(90deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.6) 34%, rgba(0,0,0,.08) 64%, rgba(0,0,0,.45) 100%);
+  }
+  .hero-content{
+    position:relative; z-index:2;
+    min-height:640px;
+    padding:32px 40px;
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .hero-topbar{ display:flex; justify-content:flex-end; }
+  .hero-meta{
+    font-family:var(--font-head); font-weight:500;
+    font-size:.7rem; text-transform:uppercase; letter-spacing:.26em;
+    color:rgba(255,255,255,.42);
+  }
+  .hero-main{ max-width:640px; padding-block:44px; }
+  .hero-title{
+    font-family:var(--font-display);
+    font-weight:400;
+    font-size:clamp(2.6rem, 7vw, 5.2rem);
+    text-transform:uppercase;
+    letter-spacing:.01em;
+    line-height:1.02;
+    margin:0 0 var(--space-3);
+  }
+  .hero-title .accent{ color:var(--color-primary); }
+  .hero-sub{
+    max-width:520px; margin-bottom:var(--space-4);
+    font-size:1.05rem; line-height:1.55;
+    color:var(--color-muted-foreground);
+  }
+  .hero-sub .accent-serif{
+    font-family:var(--font-serif);
+    font-style:italic;
+    font-weight:400;
+    font-size:1.15em;
+    letter-spacing:-.01em;
+    color:var(--color-primary-light);
+  }
+  .hero-actions{ display:flex; gap:var(--space-2); flex-wrap:wrap; }
+  .hero-actions .btn-primary{
+    animation:pulse-glow 2.6s ease-in-out infinite;
+  }
+  .hero-actions .btn-primary:hover{ animation-play-state:paused; }
+  @keyframes pulse-glow{
+    0%,100%{ box-shadow:0 8px 24px -8px rgba(255,209,0,.35); }
+    50%{ box-shadow:0 8px 34px -4px rgba(255,209,0,.7); }
+  }
+  .hero-footer{
+    display:flex; justify-content:space-between; align-items:center; gap:24px;
+    font-family:var(--font-head); font-weight:500;
+    font-size:.7rem; text-transform:uppercase; letter-spacing:.18em;
+    color:rgba(255,255,255,.4);
+  }
+
+  .marquee{
+    border-top:1px solid var(--color-border);
+    border-bottom:1px solid var(--color-border);
+    padding-block:var(--space-2);
+    overflow:hidden;
+    margin-inline:calc(var(--space-3) * -1);
+  }
+  .marquee-track{
+    display:flex; gap:2.5rem;
+    width:max-content;
+    font-family:var(--font-head);
+    font-weight:700;
+    font-size:1.3rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--color-muted-foreground);
+    animation:marquee 22s linear infinite;
+  }
+  .marquee-track span{ color:var(--color-primary); }
+  @keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+
+  /* ---------- Hero info strip ---------- */
+  .hero-info{ padding-block:var(--space-3); }
+  .hero-info-grid{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+    gap:var(--space-5);
+  }
+  .hero-info-item{
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:var(--font-head); font-size:.95rem; font-weight:500;
+    color:var(--color-muted-foreground); white-space:nowrap;
+  }
+  .hero-info-item svg{ width:20px; height:20px; color:var(--color-primary-light); flex:none; }
+
+  /* ---------- Pre-services (hero + marquee) ---------- */
+  .pre-services{
+    background:var(--color-background);
+  }
+
+  /* ---------- Servizi: full-bleed scroll-linked plate sequence, cards alternating L/R ---------- */
+  .services-section{
+    position:relative;
+    height:100vh;
+    height:100dvh;
+    overflow:hidden;
+    background:var(--color-background-2);
+  }
+  /* Sticky pin used only by the no-GSAP fallback (see JS at the bottom) */
+  .no-gsap .services-section{ position:sticky; top:0; }
+  .services-bg{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    display:block;
+    z-index:0;
+  }
+  .services-loader{
+    position:absolute; inset:0; z-index:3;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:14px;
+    background:var(--color-background-2);
+    transition:opacity .5s ease, visibility .5s ease;
+  }
+  .services-loader.is-hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+  .services-loader-bar{
+    width:min(220px,55vw); height:3px; border-radius:999px;
+    background:rgba(255,255,255,.15); overflow:hidden;
+  }
+  .services-loader-fill{
+    height:100%; width:0%; background:var(--color-primary); border-radius:999px;
+    transition:width .15s ease-out;
+  }
+  .services-loader-text{
+    margin:0; font-size:.75rem; font-weight:600; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--color-muted-foreground);
+  }
+
+
+  .services-cards{
+    position:absolute; inset:0; z-index:2;
+    max-width:1280px; margin-inline:auto;
+    pointer-events:none;
+  }
+  .service-phase{
+    position:absolute;
+    top:50%;
+    width:min(340px,38vw);
+    padding:22px 22px;
+    border-radius:var(--radius);
+    background:rgba(10,10,11,.68);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 24px 48px -18px rgba(0,0,0,.45);
+    opacity:0;
+    transition:opacity .55s var(--ease), transform .55s var(--ease);
+  }
+  /* Each card gets its own fixed slot so all four can stay on screen at once */
+  .service-phase[data-phase="0"],
+  .service-phase[data-phase="1"]{ top:27%; }
+  .service-phase[data-phase="2"],
+  .service-phase[data-phase="3"]{ top:75%; }
+  .service-phase.side-left{ left:6%; transform:translateY(-50%) translateX(-26px); }
+  .service-phase.side-right{ right:6%; transform:translateY(-50%) translateX(26px); }
+  .service-phase.is-active{ opacity:1; }
+  .service-phase.side-left.is-active{ transform:translateY(-50%) translateX(0); }
+  .service-phase.side-right.is-active{ transform:translateY(-50%) translateX(0); }
+  .service-phase .service-icon{ margin-bottom:12px; }
+  .service-phase h3{ font-size:1.3rem; margin-bottom:8px; color:var(--color-foreground); }
+  .service-phase p{ color:var(--color-muted-foreground); font-size:.95rem; margin:0; }
+
+  .services-dots{
+    position:absolute; bottom:36px; left:0; right:0; z-index:2;
+    display:flex; gap:8px; justify-content:center;
+  }
+  .services-dots .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:rgba(255,255,255,.25);
+    transition:background .3s var(--ease), transform .3s var(--ease);
+  }
+  .services-dots .dot.is-active{ background:var(--color-primary); transform:scale(1.35); }
+
+  /* ---------- Reveal (scroll-triggered, below-fold sections) ---------- */
+  .reveal{
+    opacity:0; transform:translateY(28px);
+    transition:opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease);
+  }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  .reveal--scale{
+    transform:translateY(24px) scale(.92);
+    filter:blur(6px);
+  }
+  .reveal--scale.is-visible{ transform:translateY(0) scale(1); filter:blur(0); }
+
+  .reveal--card{
+    transform:translateY(34px) scale(.94) rotate(-1.2deg);
+    transition-duration:.8s;
+  }
+  .reveal--card.is-visible{ transform:translateY(0) scale(1) rotate(0); }
+  .reveal--card:nth-child(even){ transform:translateY(34px) scale(.94) rotate(1.2deg); }
+  .reveal--card:nth-child(even).is-visible{ transform:translateY(0) scale(1) rotate(0); }
+
+  /* ---------- Appear (load-time entrance, header + hero) ---------- */
+  .appear{
+    opacity:1;
+    animation-duration:1.05s;
+    animation-fill-mode:both;
+    animation-timing-function:var(--ease);
+    animation-delay:var(--d, .08s);
+  }
+  .appear--scale{ animation-name:in-scale; }
+  .appear--soft{ animation-name:in-soft; }
+  .appear--mask{ animation-name:in-mask; }
+  .appear--pop{ animation-name:in-pop; }
+  .appear--btn{ animation-name:in-btn; }
+  .appear--side{ animation-name:in-side; }
+  .appear--stat{ animation-name:in-stat; }
+  .hero-sub.appear--soft{ animation-duration:1.25s; }
+  .appear.is-in{ animation:none; opacity:1; transform:none; clip-path:none; filter:none; }
+
+  @keyframes in-scale{ from{ opacity:0; transform:scale(.84); } to{ opacity:1; transform:scale(1); } }
+  @keyframes in-soft{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes in-mask{ from{ opacity:0; transform:translateY(40%); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes in-pop{ 0%{ opacity:0; transform:scale(.9); } 70%{ opacity:1; transform:scale(1.03); } 100%{ opacity:1; transform:scale(1); } }
+  @keyframes in-btn{ from{ opacity:0; transform:translateY(18px) scale(.94); } to{ opacity:1; transform:translateY(0) scale(1); } }
+  @keyframes in-side{ from{ opacity:0; transform:translateX(22px); } to{ opacity:1; transform:translateX(0); } }
+  @keyframes in-stat{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+
+  .headline-line{ display:block; overflow:hidden; padding:.06em .06em .14em; }
+
+  /* ---------- Service icon (reused inside the services phase cards) ---------- */
+  .service-icon{
+    width:52px; height:52px; border-radius:12px;
+    display:grid; place-items:center;
+    background:rgba(255,209,0,.14);
+    color:var(--color-primary-light);
+  }
+  .service-icon svg{ width:26px; height:26px; }
+
+  /* ---------- Contact ---------- */
+  .contact{ padding-block:var(--space-7); }
+  .contact-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6);
+    align-items:start;
+  }
+  .contact h2{ font-size:clamp(1.9rem,3.6vw,2.6rem); margin-bottom:var(--space-2); }
+  .contact > .contact-info > p.lead{ color:var(--color-muted-foreground); margin-bottom:var(--space-4); }
+
+  .info-row{
+    display:flex; gap:14px; align-items:flex-start;
+    padding-block:14px;
+    border-bottom:1px solid var(--color-border);
+  }
+  .info-row svg{ width:22px; height:22px; color:var(--color-primary-light); flex:none; margin-top:2px; }
+  .info-row strong{ display:block; font-family:var(--font-head); font-weight:600; letter-spacing:.02em; }
+  .info-row span{ color:var(--color-muted-foreground); font-size:.95rem; }
+  .info-row span a{ color:var(--color-primary-light); font-weight:600; text-decoration:underline; text-underline-offset:3px; }
+  .info-row span a:hover{ color:var(--color-primary); }
+
+  .hours-table{ width:100%; border-collapse:collapse; margin-top:4px; }
+  .hours-table td{ padding:3px 0; color:var(--color-muted-foreground); font-size:.95rem; }
+  .hours-table td:last-child{ text-align:left; color:var(--color-foreground); font-weight:600; padding-left:16px; }
+
+  .contact-info .btn{ margin-top:var(--space-4); }
+
+  .contact-map{
+    border-radius:var(--radius);
+    overflow:hidden;
+    border:1px solid var(--color-border);
+    aspect-ratio:1/1;
+    position:relative;
+  }
+  .contact-map iframe{ width:100%; height:100%; border:0; filter:grayscale(.4) invert(.9) contrast(.9); }
+  .map-badge{
+    position:absolute; top:16px; left:16px;
+    background:var(--color-background);
+    border:1px solid var(--color-border);
+    padding:8px 14px; border-radius:999px;
+    font-family:var(--font-head); font-weight:600; font-size:.9rem;
+    display:flex; align-items:center; gap:8px;
+  }
+  .map-badge svg{ width:16px; height:16px; color:var(--color-primary); }
+
+  /* ---------- Footer ---------- */
+  .site-footer{
+    border-top:1px solid var(--color-border);
+    padding-block:var(--space-4);
+  }
+  .footer-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:var(--space-2);
+  }
+  .footer-inner .logo{ font-size:1.15rem; }
+  .footer-note{ color:var(--color-muted-foreground); font-size:.85rem; }
+  .socials{ display:flex; gap:10px; }
+  .socials a{
+    width:40px; height:40px; border-radius:50%;
+    border:1px solid var(--color-border);
+    display:grid; place-items:center;
+    transition:border-color .25s var(--ease), color .25s var(--ease), transform .25s var(--ease);
+  }
+  .socials a:hover{ border-color:var(--color-primary); color:var(--color-primary-light); transform:translateY(-3px); }
+  .socials svg{ width:18px; height:18px; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:1024px){
+    .service-phase{ width:min(320px,46vw); padding:20px 18px; }
+    .service-phase.side-left{ left:4%; }
+    .service-phase.side-right{ right:4%; }
+  }
+  @media (max-width:700px){
+    .service-phase{
+      left:50% !important; right:auto !important;
+      width:min(330px,88vw);
+      padding:12px 14px;
+      transform:translate(-50%,-50%) translateY(16px) !important;
+    }
+    .service-phase .service-icon{ width:32px; height:32px; margin-bottom:4px; }
+    .service-phase .service-icon svg{ width:17px; height:17px; }
+    .service-phase h3{ font-size:.92rem; margin-bottom:2px; }
+    .service-phase p{ font-size:.72rem; line-height:1.24; }
+    .service-phase.is-active{ transform:translate(-50%,-50%) translateY(0) !important; }
+    .service-phase[data-phase="0"]{ top:15%; }
+    .service-phase[data-phase="1"]{ top:40%; }
+    .service-phase[data-phase="2"]{ top:65%; }
+    .service-phase[data-phase="3"]{ top:90%; }
+    .services-dots{ bottom:10px; }
+  }
+  /* Short viewports (small phones, landscape) — the four slots above pack
+     tighter, so trim padding/type further to keep any two cards from
+     ever touching. */
+  @media (max-width:700px) and (max-height:650px){
+    .service-phase{ width:min(300px,90vw); padding:8px 12px; }
+    .service-phase .service-icon{ width:24px; height:24px; margin-bottom:2px; }
+    .service-phase .service-icon svg{ width:13px; height:13px; }
+    .service-phase h3{ font-size:.8rem; margin-bottom:1px; }
+    .service-phase p{ font-size:.64rem; line-height:1.18; }
+  }
+  @media (max-width:768px){
+    .contact-grid{ grid-template-columns:1fr; }
+    .hero-info-grid{ flex-direction:column; gap:var(--space-2); }
+    .hero-wrap{ padding:calc(var(--space-6) + 56px) 0 0; }
+    .hero{ border-radius:0; min-height:100dvh; }
+    .hero-content{ min-height:100dvh; padding:20px 20px 28px; }
+    .hero-topbar{ display:none; }
+    .hero-main{ padding-block:32px; }
+  }
+  @media (max-width:480px){
+    .hero-actions{ flex-direction:column; align-items:stretch; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+    .reveal{ opacity:1; transform:none; }
+    .appear{ opacity:1; transform:none; filter:none; }
+    .orb, .smoke, .marquee-track{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<a href="#main" class="skip-link">Salta al contenuto</a>
+
+<header class="site-header" id="header">
+  <div class="container header-inner">
+    <a href="#top" class="logo appear appear--scale">
+      <img class="logo-mark" src="assets/logo.png" alt="" aria-hidden="true">
+      HOUSE <span>OF</span> PUMP
+    </a>
+
+    <a href="https://www.instagram.com/houseofpump__ts?igsi=MWRrbGNnaXVrMWp2eg==" target="_blank" rel="noopener noreferrer" class="btn btn-primary nav-cta appear appear--scale" style="--d:.2s">DM Instagram</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <div class="pre-services">
+  <div class="hero-wrap">
+    <section class="hero" id="top">
+      <canvas class="hero-fx" aria-hidden="true"></canvas>
+
+      <div class="hero-content">
+        <div class="hero-topbar">
+          <p class="hero-meta">Novi Ligure · Personal Training</p>
+        </div>
+
+        <div class="hero-main">
+          <p class="eyebrow appear appear--soft" style="--d:.22s">Train · Build · Belong</p>
+
+          <h1 class="hero-title">
+            <span class="headline-line appear appear--mask" style="--d:.42s">More than</span>
+            <span class="headline-line appear appear--mask" style="--d:.62s"><span class="accent">a gym.</span></span>
+          </h1>
+
+          <p class="hero-sub appear appear--soft" style="--d:.82s">
+            Allenamento personalizzato, metodo e ambiente. Un club costruito per chi vuole
+            risultati veri, senza confusione e senza <em class="accent-serif">compromessi</em>.
+          </p>
+
+          <div class="hero-actions">
+            <a href="https://www.instagram.com/houseofpump__ts?igsi=MWRrbGNnaXVrMWp2eg==" target="_blank" rel="noopener noreferrer" class="btn btn-primary appear appear--btn" style="--d:.96s">Prenota un colloquio</a>
+            <a href="#servizi" class="btn btn-ghost appear appear--side" style="--d:1.10s">Scopri il metodo</a>
+          </div>
+        </div>
+
+        <div class="hero-footer appear appear--soft" style="--d:1.2s">
+          <div>Coach Tommaso Serafin</div>
+          <div>Scorri per scoprire ↓</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack">
+      <span>FORZA</span>&nbsp;• ENERGIA •&nbsp;<span>COMMUNITY</span>&nbsp;• RISULTATI •&nbsp;<span>DISCIPLINA</span>&nbsp;•
+      <span>FORZA</span>&nbsp;• ENERGIA •&nbsp;<span>COMMUNITY</span>&nbsp;• RISULTATI •&nbsp;<span>DISCIPLINA</span>&nbsp;•
+    </div>
+  </div>
+  </div>
+
+  <!-- SERVIZI (i dischi come sfondo pieno; le schede compaiono alternate sx/dx durante lo scroll) -->
+  <section class="services-section" id="servizi" aria-label="Chi siamo e servizi House of Pump">
+    <canvas id="gearCanvas" class="services-bg" aria-hidden="true"></canvas>
+
+    <div class="services-loader" id="servicesLoader">
+      <div class="services-loader-bar"><div class="services-loader-fill" id="servicesLoaderFill"></div></div>
+      <p class="services-loader-text" id="servicesLoaderText">Caricamento 0%</p>
+    </div>
+
+    <div class="services-cards">
+      <article class="service-phase side-right is-active" data-phase="0">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M17 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm10 10v-2a4 4 0 0 0-3-3.87M15 2.13a4 4 0 0 1 0 7.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Chi Siamo</h3>
+        <p>House of Pump è uno studio di allenamento nato per offrire un percorso più seguito, personale e attento rispetto a una palestra tradizionale. Un ambiente riservato, professionale e senza giudizi, dove ogni persona può allenarsi con obiettivi chiari e la giusta guida.</p>
+      </article>
+
+      <article class="service-phase side-left" data-phase="1">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M2 9v6M22 9v6M6.5 12h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Personal Training</h3>
+        <p>Ogni percorso viene costruito sul tuo livello, sulle tue esigenze e sui risultati che vuoi raggiungere. Ti insegniamo ad allenarti con tecnica e consapevolezza, attraverso una programmazione personalizzata e un supporto costante.</p>
+      </article>
+
+      <article class="service-phase side-right" data-phase="2">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 11.5a4 4 0 1 1 6.5 3.1M12 3c-4 3-7 6-7 10a7 7 0 0 0 14 0c0-1.8-.6-3.3-1.5-4.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Nutrizione</h3>
+        <p>L'allenamento è affiancato da un percorso con un biologo nutrizionista, sviluppato in modo coerente con i tuoi obiettivi e il tuo stile di vita. Nessuna soluzione estrema: lavoriamo per costruire abitudini sostenibili e realmente applicabili.</p>
+      </article>
+
+      <article class="service-phase side-left" data-phase="3">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 5 3.2 8.7 7.5 10 4.3-1.3 7.5-5 7.5-10V6L12 3Z" stroke-linecap="round" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Perché Sceglierci</h3>
+        <p>Non promettiamo risultati facili o scorciatoie: offriamo metodo, attenzione e un percorso realmente personalizzato. Qui non sei lasciato solo con una scheda, ma seguito passo dopo passo per migliorare con sicurezza, costanza e maggiore consapevolezza.</p>
+      </article>
+    </div>
+
+    <div class="services-dots" aria-hidden="true">
+      <span class="dot is-active" data-dot="0"></span>
+      <span class="dot" data-dot="1"></span>
+      <span class="dot" data-dot="2"></span>
+      <span class="dot" data-dot="3"></span>
+    </div>
+  </section>
+
+  <!-- HERO INFO STRIP -->
+  <section class="hero-info">
+    <div class="container hero-info-grid">
+      <div class="hero-info-item appear appear--stat" style="--d:1.12s">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Accesso su prenotazione
+      </div>
+      <div class="hero-info-item appear appear--stat" style="--d:1.28s">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".6" fill="currentColor"/></svg>
+        Percorsi 100% personalizzati
+      </div>
+      <div class="hero-info-item appear appear--stat" style="--d:1.44s">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor" stroke="none"/></svg>
+        DM su Instagram per iniziare
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CONTATTI -->
+  <section class="contact" id="contatti">
+    <div class="container contact-grid">
+      <div class="contact-info">
+        <p class="eyebrow reveal">CONTATTI</p>
+        <h2 class="reveal">Vieni a provare.</h2>
+        <p class="lead reveal">Scrivici in DM su Instagram, ti rispondiamo noi con tutti i dettagli.</p>
+
+        <div class="reveal">
+          <div class="info-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            <div>
+              <strong>Indirizzo</strong>
+              <span>Via San Giovanni Bosco 85 — 15067 Novi Ligure (AL)</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor" stroke="none"/></svg>
+            <div>
+              <strong>Instagram</strong>
+              <span><a href="https://www.instagram.com/houseofpump__ts?igsi=MWRrbGNnaXVrMWp2eg==" target="_blank" rel="noopener noreferrer">@houseofpump__ts</a> — scrivici in DM</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div>
+              <strong>Orari</strong>
+              <table class="hours-table">
+                <tr><td>Lunedì – Venerdì</td><td>08:00–14:00 · 17:00–20:00</td></tr>
+                <tr><td>Sabato</td><td>10:00 – 14:00</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://www.instagram.com/houseofpump__ts?igsi=MWRrbGNnaXVrMWp2eg==" target="_blank" rel="noopener noreferrer" class="btn btn-primary reveal">Scrivici in DM su Instagram</a>
+      </div>
+
+      <div class="contact-map reveal reveal--scale">
+        <span class="map-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+          Via San Giovanni Bosco 85, Novi Ligure
+        </span>
+        <iframe
+          title="Mappa — Via San Giovanni Bosco 85, Novi Ligure (AL)"
+          src="https://www.google.com/maps?q=Via+San+Giovanni+Bosco+85+15067+Novi+Ligure+AL&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <a href="#top" class="logo">
+      <img class="logo-mark" src="assets/logo.png" alt="" aria-hidden="true">
+      HOUSE <span>OF</span> PUMP
+    </a>
+    <p class="footer-note">© <span id="year"></span> House of Pump. Tutti i diritti riservati.</p>
+    <div class="socials">
+      <a href="https://www.instagram.com/houseofpump__ts?igsi=MWRrbGNnaXVrMWp2eg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram di House of Pump">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Header shrink on scroll */
+  var header = document.getElementById('header');
+  function onScroll(){
+    if (window.scrollY > 40) header.classList.add('is-scrolled');
+    else header.classList.remove('is-scrolled');
+  }
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  /* Appear entrance animations (header + hero) */
+  var appearEls = document.querySelectorAll('.appear');
+  appearEls.forEach(function(el){
+    el.addEventListener('animationend', function handler(){
+      el.classList.add('is-in');
+      el.removeEventListener('animationend', handler);
+    }, { once:true });
+  });
+  if (reduceMotion){
+    appearEls.forEach(function(el){ el.classList.add('is-in'); });
+  } else {
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        appearEls.forEach(function(el){
+          var anims = (el.getAnimations ? el.getAnimations() : []);
+          var active = anims.some(function(a){ return a.playState === 'running' || a.playState === 'finished'; });
+          if (!active) el.classList.add('is-in');
+        });
+      });
+    });
+  }
+
+  /* Scroll reveal with per-group stagger */
+  var revealEls = document.querySelectorAll('.reveal');
+  if (reduceMotion || !('IntersectionObserver' in window)){
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+  } else {
+    var counters = {};
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var parent = el.parentElement;
+        var key = parent ? parent : el;
+        counters[key] = (counters[key] || 0);
+        var delay = counters[key] * 80;
+        counters[key]++;
+        setTimeout(function(){ el.classList.add('is-visible'); }, delay);
+        io.unobserve(el);
+      });
+    }, { threshold:.15, rootMargin:'0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+
+  /* Animated data-grid glow in the hero background */
+  (function(){
+    var hero = document.getElementById('top');
+    var canvas = document.querySelector('.hero-fx');
+    if (!hero || !canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext('2d');
+
+    var w = 0, h = 0, dpr = 1, t = 0, raf = 0;
+    var cols = 64, rows = 34;
+
+    function resize(){
+      var r = hero.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = Math.max(1, r.width);
+      h = Math.max(1, r.height);
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function rr(x, y, ww, hh, r){
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + ww, y, x + ww, y + hh, r);
+      ctx.arcTo(x + ww, y + hh, x, y + hh, r);
+      ctx.arcTo(x, y + hh, x, y, r);
+      ctx.arcTo(x, y, x + ww, y, r);
+      ctx.closePath();
+    }
+
+    function draw(){
+      ctx.clearRect(0, 0, w, h);
+      var cellW = w / cols, cellH = h / rows;
+      var centerX = w * (0.74 - ((Math.sin(t * .16) + 1) * 0.04));
+      var centerY = h * (0.43 + Math.cos(t * .19) * 0.015);
+
+      for (var gy = 0; gy < rows; gy++){
+        for (var gx = 0; gx < cols; gx++){
+          var x = gx * cellW, y = gy * cellH;
+          var dx = (x - centerX) / (w * .25);
+          var dy = (y - centerY) / (h * .28);
+          var blob = Math.exp(-(dx * dx * 1.15 + dy * dy * 1.55));
+          var wave = (Math.sin(gx * .35 + t * 1.9) + Math.cos(gy * .48 - t * 1.5) + Math.sin((gx + gy) * .16 + t * .9)) / 3;
+          var stripe = Math.exp(-Math.pow((y - (h * .38 + Math.sin(gx * .15 + t * .55) * h * .08)) / (h * .15), 2));
+          var energy = blob * (.5 + .5 * Math.max(0, wave + .22)) + stripe * .08;
+
+          var cut = Math.sin(gx * 1.31 + gy * .77 + t * 1.7);
+          if (cut < -.45) energy *= .25;
+          if (energy < .055) continue;
+
+          var pulse = .76 + .24 * Math.sin(t * 2.2 + gx * .1 + gy * .08);
+          var a = Math.max(.03, Math.min(.88, energy * pulse));
+          var hot = Math.max(0, (a - .28) / .6);
+          var rC = Math.round(92 + 158 * hot);
+          var gC = Math.round(60 + 149 * hot);
+          var bC = Math.round(10 + 0 * hot);
+          var shift = Math.sin(t * 1.1 + gy * .25) * 6;
+
+          ctx.fillStyle = 'rgba(' + rC + ',' + gC + ',' + bC + ',' + a + ')';
+          rr(x + 1 + shift, y + 1, Math.max(3, cellW - 2), Math.max(3, cellH - 2), 1);
+          ctx.fill();
+
+          if (a > .58){
+            ctx.shadowBlur = 16;
+            ctx.shadowColor = 'rgba(255,209,0,.22)';
+            ctx.fillStyle = 'rgba(255,220,100,' + ((a - .52) * .22) + ')';
+            rr(x + 2 + shift, y + 2, Math.max(2, cellW - 4), Math.max(2, cellH - 4), 1);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        }
+      }
+
+      for (var i = 0; i < 8; i++){
+        var yy = h * (.2 + i * .085) + Math.sin(t * .8 + i) * 10;
+        var grad = ctx.createLinearGradient(w * .45, yy, w * .96, yy);
+        grad.addColorStop(0, 'rgba(255,209,0,0)');
+        grad.addColorStop(.5, 'rgba(255,209,0,.07)');
+        grad.addColorStop(1, 'rgba(255,209,0,0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(w * .42, yy, w * .5, 1);
+      }
+    }
+
+    function loop(){
+      t += .018;
+      draw();
+      raf = requestAnimationFrame(loop);
+    }
+
+    resize();
+    draw();
+    if (!reduceMotion) loop();
+
+    if (window.ResizeObserver){
+      new ResizeObserver(function(){ resize(); draw(); }).observe(hero);
+    } else {
+      window.addEventListener('resize', function(){ resize(); draw(); });
+    }
+  })();
+
+  /* Scroll-linked plate sequence (GSAP ScrollTrigger): Servizi background + 4-phase reveal, alternating L/R */
+  (function(){
+    var section = document.getElementById('servizi');
+    var canvas = document.getElementById('gearCanvas');
+    if (!section || !canvas || !canvas.getContext) return;
+
+    var loader = document.getElementById('servicesLoader');
+    var loaderFill = document.getElementById('servicesLoaderFill');
+    var loaderText = document.getElementById('servicesLoaderText');
+    var phases = document.querySelectorAll('.service-phase');
+    var dots = document.querySelectorAll('.services-dots .dot');
+
+    var ctx = canvas.getContext('2d');
+    var FRAME_COUNT = 300;
+    var images = new Array(FRAME_COUNT);
+    var loadedCount = 0;
+    var seq = { frame: 0 };
+    var currentPhase = 0;
+
+    function frameUrl(i){
+      return 'discosingolo_webp/ezgif-frame-' + String(i + 1).padStart(3, '0') + '.webp';
+    }
+
+    function sizeCanvas(){
+      var rect = canvas.getBoundingClientRect();
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.round(rect.width * dpr));
+      canvas.height = Math.max(1, Math.round(rect.height * dpr));
+      // resizing the canvas resets its context, so smoothing has to be
+      // re-applied every time — this is what actually kills the pixelation
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+    }
+
+    function render(){
+      var img = images[Math.round(seq.frame)];
+      if (!img || !img.complete || !img.naturalWidth) return;
+      var cw = canvas.width, ch = canvas.height;
+      var iw = img.naturalWidth, ih = img.naturalHeight;
+      var scale = Math.max(cw / iw, ch / ih);
+      var dw = iw * scale, dh = ih * scale;
+      var dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.drawImage(img, dx, dy, dw, dh);
+    }
+
+    function setPhase(p){
+      if (p === currentPhase) return;
+      currentPhase = p;
+      // cards accumulate: once reached, a card stays on screen (never removed)
+      phases.forEach(function(el){
+        if (Number(el.getAttribute('data-phase')) <= p) el.classList.add('is-active');
+      });
+      dots.forEach(function(el){
+        if (Number(el.getAttribute('data-dot')) <= p) el.classList.add('is-active');
+      });
+    }
+
+    function updateLoaderUI(){
+      var pct = Math.round((loadedCount / FRAME_COUNT) * 100);
+      if (loaderFill) loaderFill.style.width = pct + '%';
+      if (loaderText) loaderText.textContent = 'Caricamento ' + pct + '%';
+    }
+
+    function preload(){
+      for (var i = 0; i < FRAME_COUNT; i++){
+        (function(idx){
+          var img = new Image();
+          img.decoding = 'async';
+          img.onload = img.onerror = function(){
+            loadedCount++;
+            updateLoaderUI();
+            if (idx === 0){ sizeCanvas(); render(); }
+            if (loadedCount === FRAME_COUNT) onAllLoaded();
+          };
+          img.src = frameUrl(idx);
+          images[idx] = img;
+        })(i);
+      }
+    }
+
+    function onAllLoaded(){
+      if (loader) loader.classList.add('is-hidden');
+      sizeCanvas();
+      render();
+      initScrub();
+    }
+
+    function initScrub(){
+      if (!(window.gsap && window.ScrollTrigger)){
+        initFallback();
+        return;
+      }
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.to(seq, {
+        frame: FRAME_COUNT - 1,
+        snap: 'frame',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=400%',
+          scrub: reduceMotion ? true : 0.45,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: function(self){
+            setPhase(Math.min(3, Math.floor(self.progress * 4)));
+          }
+        },
+        onUpdate: render
+      });
+      ScrollTrigger.addEventListener('refreshInit', sizeCanvas);
+
+      // Web fonts can swap in after this point and reflow the page
+      // (shifting where #servizi actually sits) — recalc the pin once
+      // they're settled so start/end stay accurate.
+      if (document.fonts && document.fonts.ready){
+        document.fonts.ready.then(function(){ ScrollTrigger.refresh(); });
+      }
+    }
+
+    // No-GSAP fallback: CSS sticky pin + a plain scroll listener
+    function initFallback(){
+      document.documentElement.classList.add('no-gsap');
+      section.style.height = '450vh';
+      var ticking = false;
+      function onScroll(){
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function(){
+          ticking = false;
+          var rect = section.getBoundingClientRect();
+          var total = rect.height - window.innerHeight;
+          if (total <= 0) return;
+          var progress = Math.min(1, Math.max(0, -rect.top / total));
+          seq.frame = Math.round(progress * (FRAME_COUNT - 1));
+          render();
+          setPhase(Math.min(3, Math.floor(progress * 4)));
+        });
+      }
+      window.addEventListener('scroll', onScroll, { passive:true });
+      onScroll();
+    }
+
+    window.addEventListener('resize', function(){
+      sizeCanvas();
+      render();
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
+    });
+
+    sizeCanvas();
+    preload();
+  })();
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+
+</body>
+</html>
