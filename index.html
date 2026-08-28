@@ -277,9 +277,7 @@
     text-transform:uppercase;
     color:var(--color-muted-foreground);
     /* Driven by GSAP in JS, not a CSS @keyframes animation — see the marquee IIFE
-       further down. A plain CSS animation stalls on mobile once ScrollTrigger's
-       normalizeScroll takes over the render loop; a GSAP tween shares that same
-       loop so it keeps ticking. */
+       further down. */
   }
   .marquee-track span{ color:var(--color-primary); }
 
@@ -774,9 +772,8 @@
 (function(){
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Scrolling marquee strip (FORZA · ENERGIA · COMMUNITY...), GSAP-driven so it
-     keeps ticking even once ScrollTrigger.normalizeScroll takes over the render
-     loop on mobile below — a plain CSS @keyframes animation stalls there. */
+  /* Scrolling marquee strip (FORZA · ENERGIA · COMMUNITY...), GSAP-driven rather
+     than a CSS @keyframes animation. */
   var marqueeTrack = document.getElementById('marqueeTrack');
   if (marqueeTrack && window.gsap){
     if (reduceMotion){
@@ -1055,13 +1052,13 @@
         return;
       }
       gsap.registerPlugin(ScrollTrigger);
-      // Mobile browsers (iOS Safari especially) drive scroll via momentum/inertia
-      // that fights with a JS-pinned section — reversing direction repeatedly
-      // through the pin (scrolling up/down over it) is exactly when it goes
-      // haywire. normalizeScroll hands scroll control to GSAP so the pin stays in
-      // sync. (The marquee strip above is GSAP-driven for this exact reason too —
-      // a plain CSS animation stalls once this takes over.)
-      ScrollTrigger.normalizeScroll(true);
+      // Confirmed from a screen recording: scrolling on iOS Safari hides/shows the
+      // address bar constantly, which fires resize events mid-gesture. ScrollTrigger
+      // recalculating the pin off one of those (a pure height change, nothing the
+      // user did) is what made the page teleport between the pinned section and
+      // Contatti. This tells ScrollTrigger's own internal resize handling to ignore
+      // that mobile address-bar noise (paired with the guarded resize listener below).
+      ScrollTrigger.config({ ignoreMobileResize: true });
       gsap.to(seq, {
         frame: FRAME_COUNT - 1,
         snap: 'frame',
@@ -1120,9 +1117,17 @@
       onScroll();
     }
 
+    // On mobile Safari, scrolling itself hides/shows the address bar, which fires a
+    // resize event on nearly every scroll (height-only, width unchanged). Refreshing
+    // ScrollTrigger's pin measurements on those recalculates the pin mid-gesture and
+    // is exactly what made scrolling back and forth over the pinned section teleport
+    // around erratically. Only refresh on a real width change (rotation/actual resize).
+    var lastInnerWidth = window.innerWidth;
     window.addEventListener('resize', function(){
       sizeCanvas();
       render();
+      if (window.innerWidth === lastInnerWidth) return;
+      lastInnerWidth = window.innerWidth;
       if (window.ScrollTrigger) ScrollTrigger.refresh();
     });
 
