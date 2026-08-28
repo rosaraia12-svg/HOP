@@ -276,10 +276,12 @@
     letter-spacing:.05em;
     text-transform:uppercase;
     color:var(--color-muted-foreground);
-    animation:marquee 22s linear infinite;
+    /* Driven by GSAP in JS, not a CSS @keyframes animation — see the marquee IIFE
+       further down. A plain CSS animation stalls on mobile once ScrollTrigger's
+       normalizeScroll takes over the render loop; a GSAP tween shares that same
+       loop so it keeps ticking. */
   }
   .marquee-track span{ color:var(--color-primary); }
-  @keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
 
   /* ---------- Hero info strip ---------- */
   .hero-info{ padding-block:var(--space-3); }
@@ -556,7 +558,7 @@
     *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
     .reveal{ opacity:1; transform:none; }
     .appear{ opacity:1; transform:none; filter:none; }
-    .orb, .smoke, .marquee-track{ animation:none; }
+    .orb, .smoke{ animation:none; }
   }
 </style>
 </head>
@@ -771,6 +773,18 @@
 <script>
 (function(){
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Scrolling marquee strip (FORZA · ENERGIA · COMMUNITY...), GSAP-driven so it
+     keeps ticking even once ScrollTrigger.normalizeScroll takes over the render
+     loop on mobile below — a plain CSS @keyframes animation stalls there. */
+  var marqueeTrack = document.getElementById('marqueeTrack');
+  if (marqueeTrack && window.gsap){
+    if (reduceMotion){
+      gsap.set(marqueeTrack, { xPercent: 0 });
+    } else {
+      gsap.to(marqueeTrack, { xPercent: -50, duration: 22, ease: 'none', repeat: -1 });
+    }
+  }
 
   /* Header shrink on scroll */
   var header = document.getElementById('header');
@@ -1041,6 +1055,13 @@
         return;
       }
       gsap.registerPlugin(ScrollTrigger);
+      // Mobile browsers (iOS Safari especially) drive scroll via momentum/inertia
+      // that fights with a JS-pinned section — reversing direction repeatedly
+      // through the pin (scrolling up/down over it) is exactly when it goes
+      // haywire. normalizeScroll hands scroll control to GSAP so the pin stays in
+      // sync. (The marquee strip above is GSAP-driven for this exact reason too —
+      // a plain CSS animation stalls once this takes over.)
+      ScrollTrigger.normalizeScroll(true);
       gsap.to(seq, {
         frame: FRAME_COUNT - 1,
         snap: 'frame',
