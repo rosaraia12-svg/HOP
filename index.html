@@ -494,6 +494,16 @@
   }
   .footer-inner .logo{ font-size:1.15rem; }
   .footer-note{ color:var(--color-muted-foreground); font-size:.85rem; }
+  .footer-credit{
+    margin:var(--space-3) 0 0;
+    padding-top:var(--space-3);
+    border-top:1px solid var(--color-border);
+    text-align:center;
+    font-size:.78rem;
+    color:var(--color-muted-foreground);
+  }
+  .footer-credit a{ color:inherit; transition:color .25s var(--ease); }
+  .footer-credit a:hover{ color:var(--color-primary-light); }
   .socials{ display:flex; gap:10px; }
   .socials a{
     width:40px; height:40px; border-radius:50%;
@@ -763,6 +773,7 @@
       </a>
     </div>
   </div>
+  <p class="footer-credit"><a href="https://rosaraia12-svg.github.io/resumee/" target="_blank" rel="noopener noreferrer">© Rosa Raia</a></p>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -844,7 +855,13 @@
     var ctx = canvas.getContext('2d');
 
     var w = 0, h = 0, dpr = 1, t = 0, raf = 0;
-    var cols = 64, rows = 34;
+    // On phones this canvas is competing with the frame preload and everything
+    // else happening at page load — a screen recording showed it sitting frozen
+    // on its very first paint for a full second on a real device. A coarser grid
+    // and skipping the shadowBlur pass cuts the per-frame cost enough to actually
+    // keep up instead of getting starved.
+    var isSmall = window.matchMedia('(max-width:700px)').matches;
+    var cols = isSmall ? 28 : 64, rows = isSmall ? 15 : 34;
 
     function resize(){
       var r = hero.getBoundingClientRect();
@@ -898,7 +915,8 @@
           rr(x + 1 + shift, y + 1, Math.max(3, cellW - 2), Math.max(3, cellH - 2), 1);
           ctx.fill();
 
-          if (a > .58){
+          if (a > .58 && !isSmall){ // shadowBlur is the single most expensive canvas
+                                     // op here — skip the extra glow pass on phones
             ctx.shadowBlur = 16;
             ctx.shadowColor = 'rgba(255,209,0,.22)';
             ctx.fillStyle = 'rgba(255,220,100,' + ((a - .52) * .22) + ')';
@@ -1017,8 +1035,14 @@
       });
     }
 
+    var lastLoaderPct = -1;
     function updateLoaderUI(){
       var pct = Math.round((loadedCount / TOTAL_TO_LOAD) * 100);
+      if (pct === lastLoaderPct) return; // frames often finish in the same tick —
+                                          // skip the DOM write when the % hasn't
+                                          // actually moved, one less thing competing
+                                          // for the main thread during the initial burst
+      lastLoaderPct = pct;
       if (loaderFill) loaderFill.style.width = pct + '%';
       if (loaderText) loaderText.textContent = 'Caricamento ' + pct + '%';
     }
